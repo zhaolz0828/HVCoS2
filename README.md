@@ -1,6 +1,6 @@
 # 🤖 GNN–PPO Multi-Route Optimizer
 
-This module implements the **GNN–PPO based multi-route optimizer** in **LB-DQA**.  
+This module implements the **GNN–PPO based multi-route optimizer** in **HVCoS**.  
 It solves a **min–max mTSP** (multi-route) problem and outputs balanced USV routes 🌆🚚.
 
 ---
