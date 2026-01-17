@@ -1,31 +1,3 @@
-"""
-Min-Max mTSP (~1000 nodes, m=5) — Version 7
-(Parameterized Actions + Auxiliary Prediction Task)
-
-Key Modifications in This Version
-1) Distance metric
-   - Task-to-task distances are loaded from distance_matrix.csv (aligned by original task IDs).
-   - Depot-to-task distances are computed via Euclidean distance in the coordinate space.
-
-2) Route length definition
-   - Route length = (sum of edge lengths) + (sum of node lengths),
-     where node lengths are read from road_length.csv and the depot node length is defined as 0.
-
-3) Logging and artifacts
-   - The script outputs: routes_progress.csv, routes_best.json, ppo_losses.csv, and ppo_loss_curve.png.
-
-4) Total path length interpretation
-   - Total length = (depot → first task + consecutive task-to-task distances + last task → depot)
-                    + (sum of all visited task node lengths).
-
-5) Algorithmic overview
-   - A hybrid heuristic framework that integrates Proximal Policy Optimization (PPO) and a
-     lightweight Graph Neural Network (GNN) encoder for operator selection and parameterized
-     cross-route moves (relocate/swap). The primary objective is to minimize the maximum
-     route length across multiple salespersons, while encouraging route-length balance via a
-     soft objective that penalizes the standard deviation of route lengths.
-"""
-
 import math
 import random
 import time
@@ -43,9 +15,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # =================== Configuration ===================
-CSV_PATH     = "Wuhu_task_coordinate.csv"
-ROADLEN_CSV  = "road_length.csv"      # Per-node intrinsic length: (id, length). Depot length is assumed to be 0.
-DISTM_PATH   = "distance_matrix.csv"  # Task-to-task empirical distance matrix
+dataset_path    = ""
+ROADLEN_CSV  = ""      # Per-node intrinsic length: (id, length). Depot length is assumed to be 0.
+DISTM_PATH   = ""  # Task-to-task empirical distance matrix
 SEED = 42
 
 M_SALESMEN = 5
@@ -126,7 +98,7 @@ OPS = ["intra_2opt", "intra_oropt", "inter_relocate", "inter_swap", "ruin_recrea
 N_OPS = len(OPS)
 
 # Output paths
-OUTPUT_DIR = "Param-GPPO-TS-芜湖-outputs"
+OUTPUT_DIR = "HVCoS-GPPO-ParamTS-AreaX-outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 PROGRESS_CSV = os.path.join(OUTPUT_DIR, "routes_progress.csv")
 BEST_JSON    = os.path.join(OUTPUT_DIR, "routes_best.json")
@@ -1667,3 +1639,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
