@@ -21,7 +21,7 @@ ROADLEN_CSV  = ""      # Per-node intrinsic length: (id, length). Depot length i
 DISTM_PATH   = ""  # Task-to-task empirical distance matrix
 SEED = 42
 
-M_SALESMEN = 5
+num_usvs = 5
 LAMBDA_BAL = 0.15  # Weight of route-length dispersion (std) in the soft objective
 
 # Graph construction for the GNN encoder (Euclidean KNN graph)
@@ -728,7 +728,7 @@ def build_node_features(coords: np.ndarray, routes: List[List[int]]) -> torch.Te
     std = xy[1:].std(axis=0, keepdims=True) + 1e-6
     norm_xy = (xy - mean) / std
 
-    route_oh = np.zeros((N, M_SALESMEN), dtype=np.float32)
+    route_oh = np.zeros((N, num_usvs), dtype=np.float32)
     for i in range(N):
         if assign[i] >= 0:
             route_oh[i, assign[i]] = 1.0
@@ -1441,7 +1441,7 @@ def main():
 
     # ---- Initialize solution ----
     t0 = time.time()
-    routes = build_init(coords, M_SALESMEN, dist_all, node_len)
+    routes = build_init(coords, num_usvs, dist_all, node_len)
     cur_max, cur_soft = compute_obj(routes, dist_all, node_len)
     best_routes = [list(r) for r in routes]
     best_max, best_soft = cur_max, cur_soft
@@ -1456,7 +1456,7 @@ def main():
     save_best_routes_json(best_routes, dist_all, BEST_JSON, coordidx_to_orig, node_len)
 
     # ---- PPO initialization ----
-    node_feat_dim = 5 + M_SALESMEN + 1  # [x,y,dist0,normx,normy] + route one-hot + deg/2
+    node_feat_dim = 5 + num_usvs + 1  # [x,y,dist0,normx,normy] + route one-hot + deg/2
     stat_dim = 9
     agent = PPOAgent(node_feat_dim, stat_dim, N_OPS)
     buffer = PPOBuffer()
@@ -1640,5 +1640,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
