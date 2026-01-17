@@ -15,7 +15,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # =================== Configuration ===================
-dataset_path    = ""
+dataset_path    = "" # Path to the region-specific dataset (e.g., Area A/B/C)
+
 ROADLEN_CSV  = ""      # Per-node intrinsic length: (id, length). Depot length is assumed to be 0.
 DISTM_PATH   = ""  # Task-to-task empirical distance matrix
 SEED = 42
@@ -1639,4 +1640,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
